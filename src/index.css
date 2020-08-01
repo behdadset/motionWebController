@@ -22,7 +22,6 @@ main {
     color: black;
     font-size: 1.2rem;
     z-index: 9999;
-    background-color: gray;
 }
 
 .form-control.webcam-on {
@@ -30,7 +29,6 @@ main {
     left: 8vw;
     top: 50px;
     transition: all 700ms;
-    background-color: gray;
 
   }
 .form-control.webcam-off {
@@ -38,7 +36,6 @@ main {
     left: 8vw;
     top: 50px;
     transition: all 700ms;
-    background-color: gray;
 
   }
   @media screen and (max-width: 576px) {
@@ -343,7 +340,7 @@ main {
 }
 
 .md-show.md-effect-12 ~ .md-overlay {
-	background-color: #e4f0e3;
+	
 } 
 
 .md-effect-12 .md-content h3,

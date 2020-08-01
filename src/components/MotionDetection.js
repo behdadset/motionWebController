@@ -1,14 +1,15 @@
-import React, { Component } from 'react'
+import React, { useEffect } from 'react'
 import Webcam from "react-webcam";
 import $ from 'jquery'
 
-export default class MotionDetection extends Component {
-
-  componentDidMount(){
+const MotionDetection = () =>  {
+  const webcamRef = React.useRef(null);
+  
+  useEffect(() => {
 
     const webcamElement = document.getElementById('webcam');
-    const webcam = new Webcam(webcamElement, 'user')
     let lastImageData;
+    
     let canvasSource = $("#canvas-source")[0];
     let canvasBlended = $("#canvas-blended")[0];
     let contextSource = canvasSource.getContext('2d');
@@ -21,16 +22,16 @@ export default class MotionDetection extends Component {
     $("#webcam-switch").change(function () {
       if(this.checked){
           $('.md-modal').addClass('md-show');
-          webcam.start()
-              .then(result =>{
+          
+              
                 cameraStarted();
                 
                 startMotionDetection();
-              })  
+               
       }
       else {        
           $("#errorMsg").addClass("d-none");
-          webcam.stop();
+          
           cameraStopped();
           setAllDrumReadyStatus(false);
       }        
@@ -205,58 +206,65 @@ export default class MotionDetection extends Component {
       $('.md-modal').removeClass('md-show');
       
     }
-  }
-  render() {
+  }, [])
+  
     return (
+      
       <div>
+        <Webcam
+          id= "webcam"
+          audio={false}
+          ref={webcamRef}
+          screenshotFormat="image/jpeg"
+        />
           <main id="motion-app">
-              <div class="form-control webcam-start" id="webcam-control">
-                      <label class="form-switch">
+              <div className="form-control webcam-start" id="webcam-control">
+                      <label className="form-switch">
                         <input type="checkbox" id="webcam-switch" />
                         <i></i> 
                         <span id="webcam-caption">Click to Start Webcam</span>
                       </label>                        
               </div>
-              <div id="errorMsg" class="col-12 alert-danger d-none">
+              <div id="errorMsg" className="col-12 alert-danger d-none">
               Fail to start camera 
               1. Please allow permission to access camera. 
               2. If you are browsing through social media built in browsers, look for the ... or browser icon on the right top/bottom corner, and open the page in Sarafi (iPhone)/ Chrome (Android)
               </div>
               
-              <div class="md-modal md-effect-12">
-                  <div class="app-panel md-content">            
-                      <div class=" d-none">
-                          <video id="webcam" autoplay playsinline width="640" height="480"></video>
-                          <canvas id="canvas-source" width="640" height="480"></canvas>
-                          <div class="motion-cam">
+              <div className="md-modal md-effect-12">
+                  <div className="app-panel md-content">            
+                      <div className=" d-none">
+                          <video id="webcam" autoPlay playsInline width="640"  height="480"></video>
+                          <canvas id="canvas-source" width="640"  height="480"></canvas>
+                          <div className="motion-cam">
                               <canvas id="canvas-blended" width="640" height="480"></canvas>
                           </div>
                       </div>
-                      <div class="drum-container">
-                          <div class="row row-top">
+                      <div className="drum-container">
+                          <div className="row row-top">
                               
                           </div>
-                          <div class="row row-bottom">
-                              <div class="col-4 p-sm-3 p-0 d-none d-sm-inline">
-                                  <img class="virtual-drum" src="images/Floor-Tom.png" name="floor-tom" vd-id='down' alt="" />
-                                  <div class="spinner-grow text-primary d-none" role="status" id="floor-tom-glowing">
-                                      <span class="sr-only">Loading...</span>
+                          <div className="row row-bottom">
+                              <div className="col-4 p-sm-3 p-0 d-none d-sm-inline">
+                                  <img className="virtual-drum" src="images/Floor-Tom.png" name="floor-tom" vd-id='down' alt="" />
+                                  <div className="spinner-grow text-primary d-none" role="status" id="floor-tom-glowing">
+                                      <span className="sr-only">Loading...</span>
                                   </div>
                               </div>
-                              <div class="col-5 p-sm-3 p-0">
+                              <div className="col-5 p-sm-3 p-0">
                                   
                               </div>
-                              <div class="col-3 p-sm-3 p-0 d-none d-sm-inline">
-                                  <img class="virtual-drum" src="images/Snare.png" name="snare" vd-id='up' alt="" />
-                                  <div class="spinner-grow text-primary d-none" role="status" id="snare-glowing">
-                                      <span class="sr-only">Loading...</span>
+                              <div className="col-3 p-sm-3 p-0 d-none d-sm-inline">
+                                  <img className="virtual-drum" src="images/Snare.png" name="snare" vd-id='up' alt="" />
+                                  <div className="spinner-grow text-primary d-none" role="status" id="snare-glowing">
+                                      <span className="sr-only">Loading...</span>
                                   </div>
                               </div>
                           </div>
                       </div>
                   </div>
                   </div>
-              <div class="md-overlay"></div>
+              <div className="md-overlay"></div>
           </main>
           <script src='js/motion-detection.js'></script>
           
@@ -316,5 +324,7 @@ export default class MotionDetection extends Component {
           </div>
       </div>
     )
-  }
+  
 }
+
+export default MotionDetection
