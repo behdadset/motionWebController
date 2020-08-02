@@ -1,7 +1,11 @@
 main {
   width: 100vw;
   height: 100vh;
-  background: white;
+  
+}
+
+img{
+  max-width: 500px;
 }
 
 .app-panel{
@@ -208,7 +212,7 @@ main {
 
   .drum-container{
       width: 100vw;
-      height: 100vh;
+      height: 90vh;
       top: 0;
       left: 0;
       position: absolute;
@@ -338,10 +342,6 @@ main {
 	-moz-transition: all 0.3s;
 	transition: all 0.3s;
 }
-
-.md-show.md-effect-12 ~ .md-overlay {
-	
-} 
 
 .md-effect-12 .md-content h3,
 .md-effect-12 .md-content {

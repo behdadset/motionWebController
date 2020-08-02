@@ -1,15 +1,50 @@
-import React, { useEffect } from 'react'
+import React, { Component } from 'react'
 import Webcam from "react-webcam";
 import $ from 'jquery'
+import './buffer-loader'
+import Up from "../images/Up.png";
+import Down from "../images/Down.png";
 
-const MotionDetection = () =>  {
-  const webcamRef = React.useRef(null);
+
+export default class MotionDetection extends Component {
+  constructor(props) {
+    super(props);
+    this.checkbox = true;
+}
+ 
+
+setRef = (webcam) => {
+  this.webcam = webcam;
+}
+
+stop = () => {
+  if (this.checkbox){
+    this.checkbox = !this.checkbox
+    let stream = this.webcam.video.srcObject;
+    const tracks = stream.getTracks();
+    console.log(this.checkbox)
+    tracks.forEach(track => track.stop());
+    this.webcam.video.srcObject = null;
+  }else{
+    this.checkbox = !this.checkbox
+    $('.md-modal').addClass('md-show');
+    console.log(this.checkbox)
+    
+    
+  }
   
-  useEffect(() => {
+};
+
+  componentDidMount(){
+    this.motionDetection()
+
+  }
+
+
+  motionDetection = () => {
 
     const webcamElement = document.getElementById('webcam');
     let lastImageData;
-    
     let canvasSource = $("#canvas-source")[0];
     let canvasBlended = $("#canvas-blended")[0];
     let contextSource = canvasSource.getContext('2d');
@@ -25,13 +60,13 @@ const MotionDetection = () =>  {
           
               
                 cameraStarted();
-                
+                console.log('start')
                 startMotionDetection();
                
       }
       else {        
           $("#errorMsg").addClass("d-none");
-          
+          console.log('stop')
           cameraStopped();
           setAllDrumReadyStatus(false);
       }        
@@ -206,21 +241,21 @@ const MotionDetection = () =>  {
       $('.md-modal').removeClass('md-show');
       
     }
-  }, [])
-  
+
+  }
+  render() {
     return (
       
       <div>
         <Webcam
           id= "webcam"
           audio={false}
-          ref={webcamRef}
-          screenshotFormat="image/jpeg"
+          ref={this.setRef}
         />
           <main id="motion-app">
               <div className="form-control webcam-start" id="webcam-control">
                       <label className="form-switch">
-                        <input type="checkbox" id="webcam-switch" />
+                        <input type="checkbox" id="webcam-switch" defaultChecked onChange={this.stop}/>
                         <i></i> 
                         <span id="webcam-caption">Click to Start Webcam</span>
                       </label>                        
@@ -234,8 +269,8 @@ const MotionDetection = () =>  {
               <div className="md-modal md-effect-12">
                   <div className="app-panel md-content">            
                       <div className=" d-none">
-                          <video id="webcam" autoPlay playsInline width="640"  height="480"></video>
-                          <canvas id="canvas-source" width="640"  height="480"></canvas>
+                          <video id="webcam" autoPlay playsInline width="640" height="480"></video>
+                          <canvas id="canvas-source" width="640" height="480"></canvas>
                           <div className="motion-cam">
                               <canvas id="canvas-blended" width="640" height="480"></canvas>
                           </div>
@@ -245,8 +280,8 @@ const MotionDetection = () =>  {
                               
                           </div>
                           <div className="row row-bottom">
-                              <div className="col-4 p-sm-3 p-0 d-none d-sm-inline">
-                                  <img className="virtual-drum" src="images/Floor-Tom.png" name="floor-tom" vd-id='down' alt="" />
+                              <div className="col-3 p-sm-3 p-0 d-none d-sm-inline">
+                                  <img className="virtual-drum" src={Down} name="floor-tom" vd-id='down' alt="" />
                                   <div className="spinner-grow text-primary d-none" role="status" id="floor-tom-glowing">
                                       <span className="sr-only">Loading...</span>
                                   </div>
@@ -255,7 +290,7 @@ const MotionDetection = () =>  {
                                   
                               </div>
                               <div className="col-3 p-sm-3 p-0 d-none d-sm-inline">
-                                  <img className="virtual-drum" src="images/Snare.png" name="snare" vd-id='up' alt="" />
+                                  <img className="virtual-drum" src={Up} name="snare" vd-id='up' alt="" />
                                   <div className="spinner-grow text-primary d-none" role="status" id="snare-glowing">
                                       <span className="sr-only">Loading...</span>
                                   </div>
@@ -266,8 +301,8 @@ const MotionDetection = () =>  {
                   </div>
               <div className="md-overlay"></div>
           </main>
+          <h1 id = "fetch">Current News</h1>
           <script src='js/motion-detection.js'></script>
-          
           
           <div>
               Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quis tenetur veritatis assumenda a quas quasi alias animi? Debitis quas eum corporis, modi quibusdam laborum accusantium. Expedita mollitia id optio blanditiis?
@@ -281,50 +316,8 @@ const MotionDetection = () =>  {
               Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quis tenetur veritatis assumenda a quas quasi alias animi? Debitis quas eum corporis, modi quibusdam laborum accusantium. Expedita mollitia id optio blanditiis?
               Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quis tenetur veritatis assumenda a quas quasi alias animi? Debitis quas eum corporis, modi quibusdam laborum accusantium. Expedita mollitia id optio blanditiis?
               Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quis tenetur veritatis assumenda a quas quasi alias animi? Debitis quas eum corporis, modi quibusdam laborum accusantium. Expedita mollitia id optio blanditiis?
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quis tenetur veritatis assumenda a quas quasi alias animi? Debitis quas eum corporis, modi quibusdam laborum accusantium. Expedita mollitia id optio blanditiis?
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quis tenetur veritatis assumenda a quas quasi alias animi? Debitis quas eum corporis, modi quibusdam laborum accusantium. Expedita mollitia id optio blanditiis?
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quis tenetur veritatis assumenda a quas quasi alias animi? Debitis quas eum corporis, modi quibusdam laborum accusantium. Expedita mollitia id optio blanditiis?
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quis tenetur veritatis assumenda a quas quasi alias animi? Debitis quas eum corporis, modi quibusdam laborum accusantium. Expedita mollitia id optio blanditiis?
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quis tenetur veritatis assumenda a quas quasi alias animi? Debitis quas eum corporis, modi quibusdam laborum accusantium. Expedita mollitia id optio blanditiis?
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quis tenetur veritatis assumenda a quas quasi alias animi? Debitis quas eum corporis, modi quibusdam laborum accusantium. Expedita mollitia id optio blanditiis?
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quis tenetur veritatis assumenda a quas quasi alias animi? Debitis quas eum corporis, modi quibusdam laborum accusantium. Expedita mollitia id optio blanditiis?
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quis tenetur veritatis assumenda a quas quasi alias animi? Debitis quas eum corporis, modi quibusdam laborum accusantium. Expedita mollitia id optio blanditiis?
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quis tenetur veritatis assumenda a quas quasi alias animi? Debitis quas eum corporis, modi quibusdam laborum accusantium. Expedita mollitia id optio blanditiis?
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quis tenetur veritatis assumenda a quas quasi alias animi? Debitis quas eum corporis, modi quibusdam laborum accusantium. Expedita mollitia id optio blanditiis?
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quis tenetur veritatis assumenda a quas quasi alias animi? Debitis quas eum corporis, modi quibusdam laborum accusantium. Expedita mollitia id optio blanditiis?
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quis tenetur veritatis assumenda a quas quasi alias animi? Debitis quas eum corporis, modi quibusdam laborum accusantium. Expedita mollitia id optio blanditiis?
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quis tenetur veritatis assumenda a quas quasi alias animi? Debitis quas eum corporis, modi quibusdam laborum accusantium. Expedita mollitia id optio blanditiis?
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quis tenetur veritatis assumenda a quas quasi alias animi? Debitis quas eum corporis, modi quibusdam laborum accusantium. Expedita mollitia id optio blanditiis?
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quis tenetur veritatis assumenda a quas quasi alias animi? Debitis quas eum corporis, modi quibusdam laborum accusantium. Expedita mollitia id optio blanditiis?
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quis tenetur veritatis assumenda a quas quasi alias animi? Debitis quas eum corporis, modi quibusdam laborum accusantium. Expedita mollitia id optio blanditiis?
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quis tenetur veritatis assumenda a quas quasi alias animi? Debitis quas eum corporis, modi quibusdam laborum accusantium. Expedita mollitia id optio blanditiis?
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quis tenetur veritatis assumenda a quas quasi alias animi? Debitis quas eum corporis, modi quibusdam laborum accusantium. Expedita mollitia id optio blanditiis?
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quis tenetur veritatis assumenda a quas quasi alias animi? Debitis quas eum corporis, modi quibusdam laborum accusantium. Expedita mollitia id optio blanditiis?
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quis tenetur veritatis assumenda a quas quasi alias animi? Debitis quas eum corporis, modi quibusdam laborum accusantium. Expedita mollitia id optio blanditiis?
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quis tenetur veritatis assumenda a quas quasi alias animi? Debitis quas eum corporis, modi quibusdam laborum accusantium. Expedita mollitia id optio blanditiis?
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quis tenetur veritatis assumenda a quas quasi alias animi? Debitis quas eum corporis, modi quibusdam laborum accusantium. Expedita mollitia id optio blanditiis?
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quis tenetur veritatis assumenda a quas quasi alias animi? Debitis quas eum corporis, modi quibusdam laborum accusantium. Expedita mollitia id optio blanditiis?
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quis tenetur veritatis assumenda a quas quasi alias animi? Debitis quas eum corporis, modi quibusdam laborum accusantium. Expedita mollitia id optio blanditiis?
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quis tenetur veritatis assumenda a quas quasi alias animi? Debitis quas eum corporis, modi quibusdam laborum accusantium. Expedita mollitia id optio blanditiis?
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quis tenetur veritatis assumenda a quas quasi alias animi? Debitis quas eum corporis, modi quibusdam laborum accusantium. Expedita mollitia id optio blanditiis?
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quis tenetur veritatis assumenda a quas quasi alias animi? Debitis quas eum corporis, modi quibusdam laborum accusantium. Expedita mollitia id optio blanditiis?
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quis tenetur veritatis assumenda a quas quasi alias animi? Debitis quas eum corporis, modi quibusdam laborum accusantium. Expedita mollitia id optio blanditiis?
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quis tenetur veritatis assumenda a quas quasi alias animi? Debitis quas eum corporis, modi quibusdam laborum accusantium. Expedita mollitia id optio blanditiis?
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quis tenetur veritatis assumenda a quas quasi alias animi? Debitis quas eum corporis, modi quibusdam laborum accusantium. Expedita mollitia id optio blanditiis?
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quis tenetur veritatis assumenda a quas quasi alias animi? Debitis quas eum corporis, modi quibusdam laborum accusantium. Expedita mollitia id optio blanditiis?
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quis tenetur veritatis assumenda a quas quasi alias animi? Debitis quas eum corporis, modi quibusdam laborum accusantium. Expedita mollitia id optio blanditiis?
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quis tenetur veritatis assumenda a quas quasi alias animi? Debitis quas eum corporis, modi quibusdam laborum accusantium. Expedita mollitia id optio blanditiis?
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quis tenetur veritatis assumenda a quas quasi alias animi? Debitis quas eum corporis, modi quibusdam laborum accusantium. Expedita mollitia id optio blanditiis?
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quis tenetur veritatis assumenda a quas quasi alias animi? Debitis quas eum corporis, modi quibusdam laborum accusantium. Expedita mollitia id optio blanditiis?
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quis tenetur veritatis assumenda a quas quasi alias animi? Debitis quas eum corporis, modi quibusdam laborum accusantium. Expedita mollitia id optio blanditiis?
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quis tenetur veritatis assumenda a quas quasi alias animi? Debitis quas eum corporis, modi quibusdam laborum accusantium. Expedita mollitia id optio blanditiis?
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Itaque error facere debitis officiis accusamus, amet vero. Doloremque cupiditate ea voluptas adipisci vero sed ipsa eligendi non, officiis sequi? Atque, et?
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis dolorum quod tempora delectus impedit iure iste sed numquam totam temporibus repellat debitis laborum, sequi, accusamus vitae dolorem. Officiis, sit magnam?lore*10
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quis tenetur veritatis assumenda a quas quasi alias animi? Debitis quas eum corporis, modi quibusdam laborum accusantium. Expedita mollitia id optio blanditiis?
           </div>
       </div>
     )
-  
+  }
 }
-
-export default MotionDetection
